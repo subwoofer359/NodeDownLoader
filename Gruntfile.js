@@ -18,11 +18,15 @@ module.exports = function (grunt) {
                 },
                 'pre-commit' : 'jshint qunit'
             }
-        }
+        },
+	mochaTest: {
+		src: ['test/**/*.js']
+	}
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-githooks');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default', ['mochaTest']);
 };
