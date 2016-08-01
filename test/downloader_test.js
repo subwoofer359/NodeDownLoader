@@ -6,12 +6,16 @@ var downloader = require('../lib/downloader')
 	, url = require('url')
 	, should = require('should')
 	, https = require('https')
+	, events = require('events')
+	, rewire = require('rewire')
 	, testFile = 'jennifer-lawrence-hot-sexy-sexiest-photos-beauty-5.jpg'
 	, testUrl = 'https://rawmultimedia.files.wordpress.com/2015/12/' + testFile
 	, testUrlWithQuery = testUrl + "?r=1"
 	, testUrlParsed = url.parse(testUrl);
 
+
 describe('copy url to destination', function () {
+	
 	it('download directory should exist', function (done) {
 		fs.stat(downloader.downloadDirectory, function (err, stats) {
 			should.not.exist(err, 'Can\'t find directory:' + err);
@@ -33,7 +37,6 @@ describe('copy url to destination', function () {
 	
 	it('should create a file in download directory', function (done) {
 		downloader.downloader(testUrl, function(err, message) {
-			console.log(message);
 			fs.stat(downloader.getDestinationPath(testUrlParsed), function (err, stats) {
 				should.not.exist(err, 'Error thrown:' + err);
 				should.ok(stats.isFile(), ' File not found');
@@ -43,15 +46,40 @@ describe('copy url to destination', function () {
 		});
 	});
 	
-	it('should throw an error on local file issue', function (done) {
+	it('should throw an error on http call', function (done) {
+		downloader = rewire('../lib/downloader');
+		var revert = downloader.__set__('https', { get: function (url, callback) {
+			return this;
+		},
+			on: function(event,callback) {
+				callback(event, null);
+			}});
 		downloader.downloader(testUrl, function(err, message) {
-			console.log(message);
-			fs.stat(downloader.getDestinationPath(testUrlParsed), function (err, stats) {
-				should.not.exist(err, 'Error thrown:' + err);
-				should.ok(stats.isFile(), ' File not found');
-				should.ok(stats.size > 0, 'File is empty');
-				done();
-			});
-		});
+			should.exist(err);
+			should.equal('Can\'t read remote file', err.message);
+			done();
+			revert();
+		});	
+	});
+	
+	it('should throw an error on fs call', function (done) {
+		downloader = rewire('../lib/downloader');
+		var revert = downloader.__set__('fs', {
+			write: function (data) {
+				this.eventEmitter.emit('error', 'error');
+			},
+			createWriteStream: function(pathname) {
+				this.eventEmitter = new events.EventEmitter();
+				return this;
+			},
+			on: function(event, callback) {
+				this.eventEmitter.on(event, callback);
+			}});
+		downloader.downloader(testUrl, function(err, message) {
+			should.exist(err);
+			should.equal('Local file write error', message);
+			revert();
+			done();
+		});	
 	});
 });
