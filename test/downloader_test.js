@@ -54,14 +54,14 @@ describe('copy url to destination', function () {
 					return this;
 				},
 				on: function(event, callback) {
-					callback('error', 'error');
+					callback('error', 'Can\'t read remote file');
 				}},
 			revertHttps = downloader.__set__('https', mock),
 			revertHttp = downloader.__set__('http', mock);
 		
 		downloader.downloader(testUrl, function(err, message) {
 			should.exist(err);
-			should.equal('Can\'t read remote file', err.message);
+			should.equal('Can\'t read remote file', message);
 			revertHttp();
 			revertHttps();
 			done();
@@ -72,7 +72,7 @@ describe('copy url to destination', function () {
 		downloader = rewire('../lib/downloader');
 		var revert = downloader.__set__('fs', {
 			write: function (data) {
-				this.eventEmitter.emit('error', 'error');
+				this.eventEmitter.emit('error', 'Local file write error');
 			},
 			createWriteStream: function(pathname) {
 				this.eventEmitter = new events.EventEmitter();
@@ -81,11 +81,17 @@ describe('copy url to destination', function () {
 			on: function(event, callback) {
 				this.eventEmitter.on(event, callback);
 			}});
+		
+		var isNotDone = true;
 		downloader.downloader(testUrl, function(err, message) {
+			
 			should.exist(err);
 			should.equal('Local file write error', message);
 			revert();
-			done();
+			
+			
+				done();
+			
 		});	
 	});
 	
