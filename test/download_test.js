@@ -18,7 +18,7 @@ describe('POST /download', function () {
 		request(app)
 		.post('/download')
 		.expect(400)
-		.expect('No url given')
+		.expect('No url given\n')
 		.end(function(err, res) {
 			if(err) {
 				throw err;
@@ -33,7 +33,7 @@ describe('POST /download', function () {
 		.post('/download')
 		.send({url: testUrl})
 		.expect(200)
-		.expect(testUrl)
+		.expect(testUrl + "\n")
 		.end(function (err, res) {
 			if (err) {
 				throw err;
@@ -48,7 +48,7 @@ describe('POST /download', function () {
 		.post('/download')
 		.send({url: 'http://ftp.heanet.ie/pub/linuxmint.com/linuxmint-18-cinnamon-64bit.iso'})
 		.expect(500)
-		.expect('Can\'t read remote file')
+		.expect('Can\'t read remote file\n')
 		.end(function(err, res) {
 			if (err) {
 				throw err;

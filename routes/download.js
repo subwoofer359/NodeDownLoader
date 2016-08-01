@@ -6,19 +6,18 @@ exports.download = function (req, res) {
 			if(err) {
 				if(!res.finished) {
 					res.status(500);
-					res.send(err.message);
+					res.send(err.message + "\n");
 					res.end();
 				}
-				console.log(err);
 				return;
 			}
-			res.send(req.body.url);
+			res.send(req.body.url + "\n");
 			res.end();
 		});
 		
 	} else {
 		res.status(400);
-		res.send('No url given');
+		res.send('No url given\n');
 		res.end();
 	}
 	
