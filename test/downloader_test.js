@@ -5,9 +5,9 @@ var downloader = require('../lib/downloader')
 	, fs = require('fs')
 	, url = require('url')
 	, should = require('should')
-	, https = require('https')
 	, events = require('events')
 	, rewire = require('rewire')
+	, sinon = require('sinon')
 	, testFile = 'jennifer-lawrence-hot-sexy-sexiest-photos-beauty-5.jpg'
 	, testUrl = 'https://rawmultimedia.files.wordpress.com/2015/12/' + testFile
 	, testUrlWithQuery = testUrl + "?r=1"
@@ -48,17 +48,23 @@ describe('copy url to destination', function () {
 	
 	it('should throw an error on http call', function (done) {
 		downloader = rewire('../lib/downloader');
-		var revert = downloader.__set__('https', { get: function (url, callback) {
-			return this;
-		},
-			on: function(event,callback) {
-				callback(event, null);
-			}});
+		var mock = { 
+				eventEmitter: new events.EventEmitter(),
+				get: function (url, callback) {
+					return this;
+				},
+				on: function(event, callback) {
+					callback('error', 'error');
+				}},
+			revertHttps = downloader.__set__('https', mock),
+			revertHttp = downloader.__set__('http', mock);
+		
 		downloader.downloader(testUrl, function(err, message) {
 			should.exist(err);
 			should.equal('Can\'t read remote file', err.message);
+			revertHttp();
+			revertHttps();
 			done();
-			revert();
 		});	
 	});
 	
@@ -82,4 +88,5 @@ describe('copy url to destination', function () {
 			done();
 		});	
 	});
+	
 });
