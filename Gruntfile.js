@@ -9,7 +9,10 @@ module.exports = function (grunt) {
             }
         },
         jshint: {
-            all: ['Gruntfile.js', '**/*.js', '!node_modules/**', '!views/**']
+            all: ['Gruntfile.js', '**/*.js', '!node_modules/**', '!views/**'],
+            options: {
+            	jshintrc: true
+            }
         },
         githooks: {
             all: {
