@@ -11,6 +11,10 @@ function submitUrl() {
 	
 	$.post('./download', formData, function (data) {
 		$response.html('<small>' + data + '</small>');
+	}).fail(function (data) {
+		if(data.responseText) {
+			$response.html('<small>' + data.responseText + '</small>');
+		}
 	});
 }
 

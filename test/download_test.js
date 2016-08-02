@@ -47,8 +47,8 @@ describe('POST /download', function () {
 		request(app)
 		.post('/download')
 		.send({url: 'http://ftp.heanet.ie/pub/linuxmint.com/linuxmint-18-cinnamon-64bit.iso'})
-		.expect(500)
 		.expect('Can\'t read remote file\n')
+		.expect(500)
 		.end(function(err, res) {
 			if (err) {
 				throw err;
