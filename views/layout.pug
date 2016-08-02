@@ -3,5 +3,14 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src = 'https://code.jquery.com/jquery-3.1.0.min.js',
+      integrity='sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=',
+      crossorigin='anonymous')
+
+    script(src = '/downloaderAsync.js')
   body
     block content
+
+    input(type = 'text', id = 'url', name = 'url', placeholder = 'enter url')
+    button(id = 'download-btn') Fucking Hell
+    div(id = 'response')
