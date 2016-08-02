@@ -14,7 +14,7 @@ exports.download = function (req, res) {
 				}
 				return;
 			}
-			res.send(req.body.url + "\n");
+			res.send(message + "\n");
 			res.end();
 		});
 		

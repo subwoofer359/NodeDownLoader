@@ -33,7 +33,7 @@ describe('POST /download', function () {
 		.post('/download')
 		.send({url: testUrl})
 		.expect(200)
-		.expect(testUrl + "\n")
+		.expect('Finished transfer' + "\n")
 		.end(function (err, res) {
 			if (err) {
 				throw err;
