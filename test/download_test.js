@@ -8,7 +8,7 @@ var express = require('express'),
 	errorHandler = require('errorhandler'),
 	request = require('supertest'),
 	app,
-	testUrl = 'http://www.fabzz.com/wp-content/uploads/celebrities/sarah-hyland/for-complex-magazine-january-2013/Sarah%20Hyland%20hot%20in%20Complex-05.jpg';
+	testUrl = 'http://adrianmclaughlin.ie/images/profile.jpg';
 
 describe('POST /download', function () {
 	app = express();

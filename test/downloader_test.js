@@ -8,8 +8,8 @@ var downloader = require('../lib/downloader'),
 	events = require('events'),
 	rewire = require('rewire'),
 	sinon = require('sinon'),
-	testFile = 'jennifer-lawrence-hot-sexy-sexiest-photos-beauty-5.jpg',
-	testUrl = 'https://rawmultimedia.files.wordpress.com/2015/12/' + testFile,
+	testFile = 'profile.jpg',
+	testUrl = 'http://adrianmclaughlin.ie/images/' + testFile,
 	testUrlWithQuery = testUrl + "?r=1",
 	testUrlParsed = url.parse(testUrl);
 
