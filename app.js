@@ -3,18 +3,18 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , download = require('./routes/download')
-  , favicon = require('serve-favicon')
-  , morgan = require('morgan')
-  , bodyParser = require('body-parser')
-  , http = require('http')
-  , path = require('path')
-  , multer = require('multer')
-  , methodOverride = require('method-override')
-  , errorHandler = require('errorhandler');
+var express = require('express'),
+	routes = require('./routes'),
+	user = require('./routes/user'),
+	download = require('./routes/download'),
+	favicon = require('serve-favicon'),
+	morgan = require('morgan'),
+	bodyParser = require('body-parser'),
+	http = require('http'),
+	path = require('path'),
+	multer = require('multer'),
+	methodOverride = require('method-override'),
+	errorHandler = require('errorhandler');
 
 var app = express();
 
@@ -33,7 +33,7 @@ app.use(multer());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(errorHandler());
 }
 

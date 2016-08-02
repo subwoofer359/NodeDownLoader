@@ -1,17 +1,17 @@
 /*global describe*/
 /*global it*/
 
-var downloader = require('../lib/downloader')
-	, fs = require('fs')
-	, url = require('url')
-	, should = require('should')
-	, events = require('events')
-	, rewire = require('rewire')
-	, sinon = require('sinon')
-	, testFile = 'jennifer-lawrence-hot-sexy-sexiest-photos-beauty-5.jpg'
-	, testUrl = 'https://rawmultimedia.files.wordpress.com/2015/12/' + testFile
-	, testUrlWithQuery = testUrl + "?r=1"
-	, testUrlParsed = url.parse(testUrl);
+var downloader = require('../lib/downloader'),
+	fs = require('fs'),
+	url = require('url'),
+	should = require('should'),
+	events = require('events'),
+	rewire = require('rewire'),
+	sinon = require('sinon'),
+	testFile = 'jennifer-lawrence-hot-sexy-sexiest-photos-beauty-5.jpg',
+	testUrl = 'https://rawmultimedia.files.wordpress.com/2015/12/' + testFile,
+	testUrlWithQuery = testUrl + "?r=1",
+	testUrlParsed = url.parse(testUrl);
 
 
 describe('copy url to destination', function () {
