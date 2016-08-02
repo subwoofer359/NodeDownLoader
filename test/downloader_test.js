@@ -47,7 +47,14 @@ describe('copy url to destination', function () {
 	});
 	
 	it('should throw an error on http call', function (done) {
-		downloader = rewire('../lib/downloader');
+		/*
+		 * Using rewire to mock out calls to http and https
+		 * in httpCopyFile module
+		 * also to rewire this back into downloader module 
+		 */
+		var httpCopyFile = rewire('../lib/downloader/httpCopyFile.js'),
+			downloader = rewire('../lib/downloader/index.js');
+		
 		var mock = { 
 				eventEmitter: new events.EventEmitter(),
 				get: function (url, callback) {
@@ -56,14 +63,16 @@ describe('copy url to destination', function () {
 				on: function(event, callback) {
 					callback('error', 'Can\'t read remote file');
 				}},
-			revertHttps = downloader.__set__('https', mock),
-			revertHttp = downloader.__set__('http', mock);
+			revertHttps = httpCopyFile.__set__('https', mock),
+			revertHttp = httpCopyFile.__set__('http', mock),
+			revertLoader = downloader.__set__('httpCopyFile', httpCopyFile.httpCopyFile);
 		
 		downloader.downloader(testUrl, function(err, message) {
 			should.exist(err);
 			should.equal('Can\'t read remote file', err.message);
 			revertHttp();
 			revertHttps();
+			revertLoader();
 			done();
 		});	
 	});
