@@ -8,8 +8,8 @@ exports.download = function (req, res) {
 		downloader.downloader(req.body.url, function (err, message) {
 			if(err) {
 				if(!res.finished) {
-					res.status(HTTP_INTERNAL_ERROR);
 					res.send(err.message + "\n");
+					res.status(HTTP_INTERNAL_ERROR);
 					res.end();
 				}
 				return;
